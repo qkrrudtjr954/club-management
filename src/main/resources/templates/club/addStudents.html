@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Club</title>
+</head>
+<body>
+<h1>학생 등록</h1>
+<form th:action="@{/schools/{schoolId}/clubs/{clubId}/students(schoolId=${schoolId}, clubId=${clubId})}" method="post">
+    <input th:each="student: ${students}" type="checkbox" name="studentIds" th:text="${student.name}"
+           th:value="${student.id}">
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>

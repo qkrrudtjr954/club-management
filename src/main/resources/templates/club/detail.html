@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Club</title>
+</head>
+<body>
+<a th:href="@{/schools/{schoolId}/clubs/{clubId}/students(schoolId=${club.school.getId()}, clubId=${club.getId()})}">가입하기</a>
+<h1>동아리 상세 정보</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <td>
+            <span th:text="${club.getId()}"></span>
+        </td>
+    </tr>
+    <tr>
+        <th>이름</th>
+        <td>
+            <span th:text="${club.getName()}"></span>
+        </td>
+    </tr>
+    <tr>
+        <th>학생 수</th>
+        <td>
+            <span th:text="${club.getMemberCount()}"></span>
+        </td>
+    </tr>
+</table>
+
+<h3>동아리 가입자 정보</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>가입일</th>
+    </tr>
+    <tr th:each="member: ${club.getMemberInfo()}">
+        <td>
+            <span th:text="${member.student.id}"></span>
+        </td>
+        <td>
+            <span th:text="${member.student.name}"></span>
+        </td>
+        <td>
+            <span th:text="${member.joinedAt}"></span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

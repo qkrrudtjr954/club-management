@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Club</title>
+</head>
+<body>
+<h1>동아리 등록</h1>
+<form th:action="@{/schools/{schoolId}/clubs(schoolId=${schoolId})}" method="post">
+    <label for="name">이름:</label>
+    <input type="text" id="name" name="name" placeholder="동아리 이름"><br><br>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>School</title>
+</head>
+<body>
+<h1>학교</h1>
+<a href="/schools/create">추가</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>삭제</th>
+        <th>학생 목록 바로가기</th>
+        <th>동아리 목록 바로가기</th>
+    </tr>
+    <tr th:each="school : ${schools}">
+        <td th:text="${school.id}"></td>
+        <td th:text="${school.name}"></td>
+        <td>
+            <form action="/schools" th:method="delete">
+                <input type="hidden" name="id" th:value="${school.id}">
+                <input type="submit" value="삭제">
+            </form>
+        </td>
+        <td>
+            <a th:href="@{/schools/{schoolId}/students(schoolId=${school.id})}">학생 목록</a>
+        </td>
+        <td>
+            <a th:href="@{/schools/{schoolId}/clubs(schoolId=${school.id})}">동아리 목록</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
