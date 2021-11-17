@@ -5,12 +5,16 @@ import com.clubmanagement.domain.ClubJoinInfo;
 import com.clubmanagement.domain.School;
 import com.clubmanagement.domain.Student;
 import com.clubmanagement.dto.ClubDto;
+import com.clubmanagement.exceptions.CannotLeaveException;
 import com.clubmanagement.repository.ClubJoinInfoRepository;
 import com.clubmanagement.repository.ClubRepository;
 import com.clubmanagement.repository.SchoolRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,5 +90,38 @@ public class ClubService {
 
             clubJoinInfoRepository.save(joinInfo);
         }
+    }
+
+    private void checkLeavable(Club club, List<Long> studentIds) throws CannotLeaveException {
+        List<ClubJoinInfo> clubJoinInfos = club.getMemberInfo().stream()
+                .filter(clubJoinInfo -> studentIds.contains(clubJoinInfo.getStudent().getId()))
+                .collect(Collectors.toList());
+
+        Calendar leaveableDate = Calendar.getInstance();
+        leaveableDate.setTime(new Date());
+        leaveableDate.add(Calendar.DATE, -7);
+
+        for (ClubJoinInfo clubJoinInfo : clubJoinInfos) {
+            Calendar joinedAt = Calendar.getInstance();
+            joinedAt.setTime(clubJoinInfo.getJoinedAt());
+
+            if (joinedAt.after(leaveableDate)) {
+                throw new CannotLeaveException("가입한지 일주일이 경과하지 않은 학생이 존재합니다.");
+            }
+        }
+    }
+
+    @Transactional
+    public void leave(Club club, List<Student> students) {
+        List<Long> studentIds = students.stream().map(Student::getId).collect(Collectors.toList());
+
+        try {
+            checkLeavable(club, studentIds);
+        } catch (CannotLeaveException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        clubJoinInfoRepository.deleteAllByClubIdAndStudentIdIn(club.getId(), studentIds);
     }
 }

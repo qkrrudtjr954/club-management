@@ -2,6 +2,7 @@ package com.clubmanagement.controller;
 
 import com.clubmanagement.domain.Club;
 import com.clubmanagement.domain.Student;
+import com.clubmanagement.exceptions.CannotLeaveException;
 import com.clubmanagement.service.ClubService;
 import com.clubmanagement.service.StudentService;
 import org.springframework.stereotype.Controller;
@@ -79,6 +80,18 @@ public class ClubController {
         List<Student> students = studentService.findByIds(studentIds);
 
         clubService.join(club, students);
+
+        Path path = Paths.get("/", "schools", schoolId.toString(), "clubs", clubId.toString());
+        return new RedirectView(path.toString());
+    }
+
+
+    @DeleteMapping("/schools/{schoolId}/clubs/{clubId}/students")
+    public RedirectView removeStudents(@PathVariable Long schoolId, @PathVariable Long clubId, @RequestParam List<Long> studentIds) {
+        Club club = clubService.findOne(clubId);
+        List<Student> students = studentService.findByIds(studentIds);
+
+        clubService.leave(club, students);
 
         Path path = Paths.get("/", "schools", schoolId.toString(), "clubs", clubId.toString());
         return new RedirectView(path.toString());

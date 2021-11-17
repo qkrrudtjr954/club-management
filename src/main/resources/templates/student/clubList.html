@@ -11,6 +11,7 @@
         <th>ID</th>
         <th>이름</th>
         <th>가입일</th>
+        <th>탈퇴</th>
     </tr>
     <tr th:each="club : ${clubs}">
         <td th:text="${club.getId()}"></td>
@@ -19,6 +20,13 @@
                th:text="${club.getName()}"></a>
         </td>
         <td th:text="${club.getJoinedAt()}"></td>
+        <td>
+            <form th:action="@{/schools/{schoolId}/clubs/{clubId}/students(schoolId=${schoolId}, clubId=${club.getId()})}"
+                  th:method="delete">
+                <input type="hidden" name="studentIds" th:value="${studentId}"/>
+                <input type="submit" value="탈퇴">
+            </form>
+        </td>
     </tr>
 </table>
 
