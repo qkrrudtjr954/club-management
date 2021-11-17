@@ -40,7 +40,8 @@
             <span th:text="${member.student.id}"></span>
         </td>
         <td>
-            <span th:text="${member.student.name}"></span>
+            <a th:href="@{/schools/{schoolId}/students/{studentId}/clubs(schoolId=${schoolId}, studentId=${member.student.id})}"
+               th:text="${member.student.name}"></a>
         </td>
         <td>
             <span th:text="${member.joinedAt}"></span>

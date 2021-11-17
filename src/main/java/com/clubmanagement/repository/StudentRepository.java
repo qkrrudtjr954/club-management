@@ -13,7 +13,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findByIdIn(List<Long> studentIds);
 
     @Query(value = "select s from Student s " +
-            "left outer join ClubJoinInfo cji on s.id = cji.student.id " +
-            "where s.school.id = :schoolId and (cji.club.id <> :clubId or cji.club.id is null)")
+            "left outer join ClubJoinInfo cji on s.id = cji.student.id and cji.club.id = :clubId " +
+            "where s.school.id = :schoolId and cji.club.id is null")
     List<Student> findNotJoinedIN(@Param("schoolId") Long schoolId, @Param("clubId") Long clubId);
 }

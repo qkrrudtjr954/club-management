@@ -18,16 +18,10 @@ import java.util.stream.Collectors;
 public class StudentService {
     private final SchoolRepository schoolRepository;
     private final StudentRepository studentRepository;
-    private final ClubRepository clubRepository;
 
-    public StudentService(SchoolRepository schoolRepository, StudentRepository studentRepository, ClubRepository clubRepository) {
+    public StudentService(SchoolRepository schoolRepository, StudentRepository studentRepository) {
         this.schoolRepository = schoolRepository;
         this.studentRepository = studentRepository;
-        this.clubRepository = clubRepository;
-    }
-
-    public Student findOne(Long studentId) {
-        return studentRepository.findById(studentId).get();
     }
 
     public List<Student> findAll(Long schoolId) {
@@ -42,18 +36,6 @@ public class StudentService {
         return studentRepository.findByIdIn(ids);
     }
 
-    public List<ClubDto> findJoinedClubs(Long studentId) {
-        return clubRepository.findJoinedBy(studentId).stream()
-                .map(result -> ClubDto.builder()
-                        .club((Club) result[0])
-                        .clubJoinInfo((ClubJoinInfo) result[1])
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-    public List<Club> findJoinableClubs(Long schoolId, Long studentId) {
-        return clubRepository.findNotJoinedClubs(schoolId, studentId);
-    }
 
     public void delete(Long id) {
         studentRepository.deleteById(id);

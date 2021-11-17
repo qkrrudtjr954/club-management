@@ -3,6 +3,7 @@ package com.clubmanagement.controller;
 import com.clubmanagement.domain.Club;
 import com.clubmanagement.domain.Student;
 import com.clubmanagement.dto.ClubDto;
+import com.clubmanagement.service.ClubService;
 import com.clubmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,12 @@ import java.util.List;
 @Controller
 public class StudentController {
     private final StudentService studentService;
+    private final ClubService clubService;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, ClubService clubService) {
         this.studentService = studentService;
+        this.clubService = clubService;
     }
 
     @GetMapping("/schools/{schoolId}/students")
@@ -39,8 +42,8 @@ public class StudentController {
 
     @GetMapping("/schools/{schoolId}/students/{studentId}/clubs")
     public String studentClubs(@PathVariable Long schoolId, @PathVariable Long studentId, Model model) {
-        List<ClubDto> clubs = studentService.findJoinedClubs(studentId);
-        List<Club> joinableClubs = studentService.findJoinableClubs(schoolId, studentId);
+        List<ClubDto> clubs = clubService.findJoinedClubs(studentId);
+        List<Club> joinableClubs = clubService.findJoinableClubs(schoolId, studentId);
 
         model.addAttribute("clubs", clubs);
         model.addAttribute("joinableClubs", joinableClubs);

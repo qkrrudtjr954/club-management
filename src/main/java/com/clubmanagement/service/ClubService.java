@@ -4,6 +4,7 @@ import com.clubmanagement.domain.Club;
 import com.clubmanagement.domain.ClubJoinInfo;
 import com.clubmanagement.domain.School;
 import com.clubmanagement.domain.Student;
+import com.clubmanagement.dto.ClubDto;
 import com.clubmanagement.repository.ClubJoinInfoRepository;
 import com.clubmanagement.repository.ClubRepository;
 import com.clubmanagement.repository.SchoolRepository;
@@ -31,6 +32,20 @@ public class ClubService {
 
     public List<Club> findAll(Long schoolId) {
         return clubRepository.findAllBySchoolIdOrderByIdDesc(schoolId);
+    }
+
+
+    public List<ClubDto> findJoinedClubs(Long studentId) {
+        return clubRepository.findJoinedBy(studentId).stream()
+                .map(result -> ClubDto.builder()
+                        .club((Club) result[0])
+                        .clubJoinInfo((ClubJoinInfo) result[1])
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<Club> findJoinableClubs(Long schoolId, Long studentId) {
+        return clubRepository.findNotJoinedClubs(schoolId, studentId);
     }
 
     public Club create(Long schoolId, String name) {
