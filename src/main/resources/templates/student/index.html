@@ -13,11 +13,16 @@
     <tr>
         <th>ID</th>
         <th>이름</th>
+        <th>동아리 목록</th>
         <th>삭제</th>
     </tr>
     <tr th:each="student : ${students}">
         <td th:text="${student.id}"></td>
         <td th:text="${student.name}"></td>
+        <td>
+            <a th:href="@{/schools/{schoolId}/students/{studentId}/clubs(schoolId=${schoolId}, studentId=${student.id})}">동아리
+                목록</a>
+        </td>
         <td>
             <form th:action="@{/schools/{schoolId}/students(schoolId=${schoolId})}" th:method="delete">
                 <input type="hidden" name="id" th:value="${student.id}">

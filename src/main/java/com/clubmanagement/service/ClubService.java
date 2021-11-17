@@ -10,8 +10,8 @@ import com.clubmanagement.repository.SchoolRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClubService {
@@ -25,7 +25,7 @@ public class ClubService {
         this.schoolRepository = schoolRepository;
     }
 
-    public Club getOne(Long clubId) throws EntityNotFoundException {
+    public Club findOne(Long clubId) throws EntityNotFoundException {
         return clubRepository.getById(clubId);
     }
 
@@ -49,8 +49,17 @@ public class ClubService {
     }
 
     public void join(Club club, List<Student> students) {
+        List<Long> alreadyJoinedStudentIds = club.getMemberInfo()
+                .stream()
+                .map(clubJoinInfo -> clubJoinInfo.getStudent().getId())
+                .collect(Collectors.toList());
+
+        students = students.stream()
+                .filter(student -> !alreadyJoinedStudentIds.contains(student.getId()))
+                .collect(Collectors.toList());
+
         if (students.isEmpty()) {
-            throw new IllegalArgumentException("students is empty");
+            throw new IllegalArgumentException("No Students.");
         }
 
         for (Student student : students) {

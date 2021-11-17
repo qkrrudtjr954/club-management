@@ -1,6 +1,7 @@
 package com.clubmanagement.controller;
 
 import com.clubmanagement.domain.Student;
+import com.clubmanagement.dto.ClubDto;
 import com.clubmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,13 @@ public class StudentController {
     public String createStudent(@PathVariable Long schoolId, Model model) {
         model.addAttribute("schoolId", schoolId);
         return "student/create";
+    }
+
+    @GetMapping("/schools/{schoolId}/students/{studentId}/clubs")
+    public String studentClubs(@PathVariable Long schoolId, @PathVariable Long studentId, Model model) {
+        List<ClubDto> clubs = studentService.findJoinedClubs(studentId);
+        model.addAttribute("clubs", clubs);
+        return "student/clubList";
     }
 
     @PostMapping("/schools/{schoolId}/students")

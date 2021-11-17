@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student</title>
+</head>
+<body>
+<h1>동아리 목록</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>가입일</th>
+    </tr>
+    <tr th:each="club : ${clubs}">
+        <td th:text="${club.getId()}"></td>
+        <td>
+            <a th:href="@{/schools/{schoolId}/clubs/{clubId}(schoolId=${schoolId}, clubId=${club.getId()})}"
+               th:text="${club.getName()}"></a>
+        </td>
+        <td th:text="${club.getJoinedAt()}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
