@@ -22,5 +22,30 @@
     </tr>
 </table>
 
+<div th:if="${clubs.size() < 2}">
+    <h3>가입 가능한 동아리 목록</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>가입하기</th>
+        </tr>
+        <tr th:each="joinableClub : ${joinableClubs}">
+            <td th:text="${joinableClub.getId()}"></td>
+            <td>
+                <a th:href="@{/schools/{schoolId}/clubs/{clubId}(schoolId=${schoolId}, clubId=${joinableClub.getId()})}"
+                   th:text="${joinableClub.getName()}"></a>
+            </td>
+            <td>
+                <form th:action="@{/schools/{schoolId}/clubs/{clubId}/students(schoolId=${schoolId}, clubId=${joinableClub.getId()})}"
+                      method="post">
+                    <input type="hidden" name="studentIds" th:value="${studentId}"/>
+                    <input type="submit" value="가입">
+                </form>
+            </td>
+        </tr>
+    </table>
+
+</div>
 </body>
 </html>

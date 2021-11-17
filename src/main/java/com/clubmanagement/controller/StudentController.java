@@ -1,5 +1,6 @@
 package com.clubmanagement.controller;
 
+import com.clubmanagement.domain.Club;
 import com.clubmanagement.domain.Student;
 import com.clubmanagement.dto.ClubDto;
 import com.clubmanagement.service.StudentService;
@@ -39,7 +40,11 @@ public class StudentController {
     @GetMapping("/schools/{schoolId}/students/{studentId}/clubs")
     public String studentClubs(@PathVariable Long schoolId, @PathVariable Long studentId, Model model) {
         List<ClubDto> clubs = studentService.findJoinedClubs(studentId);
+        List<Club> joinableClubs = studentService.findJoinableClubs(schoolId, studentId);
+
         model.addAttribute("clubs", clubs);
+        model.addAttribute("joinableClubs", joinableClubs);
+
         return "student/clubList";
     }
 

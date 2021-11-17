@@ -40,5 +40,9 @@ public class Student {
         this.school = school;
     }
 
+    public Integer getJoinedClubCount() {
+        return joinedClubInfos.size();
+    }
+
 
 }

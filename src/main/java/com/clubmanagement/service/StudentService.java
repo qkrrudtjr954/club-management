@@ -11,7 +11,6 @@ import com.clubmanagement.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +26,9 @@ public class StudentService {
         this.clubRepository = clubRepository;
     }
 
+    public Student findOne(Long studentId) {
+        return studentRepository.findById(studentId).get();
+    }
 
     public List<Student> findAll(Long schoolId) {
         return studentRepository.findAllBySchoolIdOrderByIdDesc(schoolId);
@@ -47,6 +49,10 @@ public class StudentService {
                         .clubJoinInfo((ClubJoinInfo) result[1])
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public List<Club> findJoinableClubs(Long schoolId, Long studentId) {
+        return clubRepository.findNotJoinedClubs(schoolId, studentId);
     }
 
     public void delete(Long id) {

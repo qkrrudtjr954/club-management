@@ -56,6 +56,7 @@ public class ClubService {
 
         students = students.stream()
                 .filter(student -> !alreadyJoinedStudentIds.contains(student.getId()))
+                .filter(student -> student.getJoinedClubCount() < 2)
                 .collect(Collectors.toList());
 
         if (students.isEmpty()) {
